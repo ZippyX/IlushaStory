@@ -19,6 +19,7 @@ public class Hero : MonoBehaviour
     private Rigidbody2D _player;
     private SpriteRenderer _sprite;
     public bool IsDeath;
+    public bool isBoomDeath;
 
     private void Awake()
     {
@@ -85,13 +86,23 @@ public class Hero : MonoBehaviour
             IsDeath = true;
             Invoke("Death", 0.25f);
         }
+        if (collision.TryGetComponent(out Boom bomb))
+        {
+            isBoomDeath = true;
+            Invoke("Death", 0.25f);
+        }
 
     }
-    private void Death()
+    public void Death()
     {
         _health--;
         SaveGame();
         RestartGame();
+        if (_health <= 0)
+        {
+            SceneManager.LoadScene(0);
+            PlayerPrefs.DeleteAll();
+        }
     }
     void SaveGame()
     {

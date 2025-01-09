@@ -22,5 +22,7 @@ public class AnimationContoller : MonoBehaviour
             anim.SetBool("jump", true);
         if (player.IsDeath)
             anim.SetBool("death", true);
+        if (player.isBoomDeath)
+            anim.SetBool("boom_death", true);
     }
 }
