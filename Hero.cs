@@ -72,6 +72,8 @@ public class Hero : MonoBehaviour
         {
             Death();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
