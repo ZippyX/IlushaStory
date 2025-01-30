@@ -2,43 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AimMateria : MonoBehaviour
+public class AimMateria : Materia
 {
-    [SerializeField] float _speed;
-    private GameObject player;
-    private Vector3 target;
+    private GameObject _player;
+    private Vector3 _target;
+    private const float OFFSET = -0.5f;
+
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        target = player.transform.position;
-        player = null;
-
+        FindPlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
-        StraightAtack();
-        MateriaCleaner();
+        Atack();
+        MateriaCleaner(transform.position.y<0 && AtackManager.objectsForAtack.Count>0);
     }
-    public void StraightAtack()
+    public override void Atack()
     {
-        target.y = -0.5f;
-        transform.position = Vector3.MoveTowards(this.transform.position,target, _speed * Time.deltaTime);
+        _target.y = OFFSET;
+        transform.position = Vector3.MoveTowards(this.transform.position,_target, Speed * Time.deltaTime);
     }
-    void MateriaCleaner()
+    void FindPlayer()
     {
-        if (transform.position.y < 0)
-        {
-            Destroy(this.gameObject);
-            SplashAtack.objectsForAtack.Remove(this.gameObject);// добавить проверку на наличие этого объекта, чтобы ошибок не было
-        }
-        if (SplashAtack.objectsForAtack.Count == 0)
-        {
-            EventBus.onAtackEnd?.Invoke();
-            Debug.Log("атака закончилась");
-        }
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _target = _player.transform.position;
+        _player = null;
     }
-    
     
 }

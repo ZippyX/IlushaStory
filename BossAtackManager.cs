@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BossAtackManager : MonoBehaviour
 {
-    private SplashAtack _atackManager;
+    private AtackManager _atackManager;
     private int[] Attacks;
     private int counter;
     //private Queue<int >
     void Start()
     {
-        _atackManager = GetComponent<SplashAtack>();
-        Attacks = new int[] {0,0,1,0};
+        _atackManager = GetComponent<AtackManager>();
+        Attacks = new int[] {0,1,2,1,0};
      
     }
 

@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SplashAtack : MonoBehaviour
+public class AtackManager : MonoBehaviour
 {
-    [SerializeField] private Transform[] atackSpawnPoints;
-    [SerializeField] private Transform[] airAtackSpawnPoints;
+    [SerializeField] private Transform[] _atackSpawnPoints;
+    [SerializeField] private Transform[] _airAtackSpawnPoints;
+    [SerializeField] private Transform[] _inversiveAtackPoints;
     [SerializeField] float _timeForAtack;
-    public static List<GameObject> objectsForAtack;
+
+    public GameObject InverseMateria;
     public GameObject Materia;
     public GameObject AimMateria;
+    
+    public static List<GameObject> objectsForAtack;
     public bool AtackInProcess;
     void Start()
     {
@@ -38,11 +42,15 @@ public class SplashAtack : MonoBehaviour
             if (id == 0)
             {
                 
-                InstantMateria(atackSpawnPoints, Materia);
+                InstantMateria(_atackSpawnPoints, Materia);
             }
             if (id == 1)
             {
-                InstantMateria(airAtackSpawnPoints, AimMateria);
+                InstantMateria(_airAtackSpawnPoints, AimMateria);
+            }
+            if (id == 2)
+            {
+                InstantMateria(_inversiveAtackPoints, InverseMateria);
             }
         }
         
@@ -50,6 +58,7 @@ public class SplashAtack : MonoBehaviour
     void InstantMateria(Transform[] positionForATack,GameObject Materia)
     {
         int countAtackSpawnPoint = positionForATack.Length;
+           
         for (int i = 0; i < countAtackSpawnPoint; i++)
         {
             var materia = Instantiate(Materia, positionForATack[i].transform.position,Quaternion.Euler(0,0,90));
