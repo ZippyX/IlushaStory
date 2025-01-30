@@ -5,40 +5,56 @@ using UnityEngine;
 public class SplashAtack : MonoBehaviour
 {
     [SerializeField] private Transform[] atackSpawnPoints;
+    [SerializeField] private Transform[] airAtackSpawnPoints;
     [SerializeField] float _timeForAtack;
+    public static List<GameObject> objectsForAtack;
     public GameObject Materia;
-    private bool isAllSpawnPointsAtack = true;
+    public GameObject AimMateria;
+    public bool AtackInProcess;
     void Start()
     {
-
+        EventBus.onAtackEnd -= AtackEndHandler;
+        objectsForAtack = new List<GameObject>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
 
-    public void StraightSplashAtack(int atackCount)
+    void AtackEndHandler()
     {
-        if (isAllSpawnPointsAtack)
+        EventBus.onAtackEnd -= AtackEndHandler;
+        Debug.Log("атака произошла");
+        AtackInProcess = false;
+    }
+
+    public void Atack(int id)
+    {
+        if (!AtackInProcess)
         {
-            for (int i = 1; i <= atackCount; i++)
+            AtackInProcess = true;
+            EventBus.onAtackEnd += AtackEndHandler;
+            if (id == 0)
             {
-                Invoke("AllSpawnPointsAtack", _timeForAtack + i);
-            }          
-            isAllSpawnPointsAtack = false;
+                
+                InstantMateria(atackSpawnPoints, Materia);
+            }
+            if (id == 1)
+            {
+                InstantMateria(airAtackSpawnPoints, AimMateria);
+            }
         }
+        
     }
-    void AllSpawnPointsAtack()
+    void InstantMateria(Transform[] positionForATack,GameObject Materia)
     {
-        InstantMateria(atackSpawnPoints.Length);
-    }
-    void InstantMateria(int countAtackSpawnPoint )
-    {
+        int countAtackSpawnPoint = positionForATack.Length;
         for (int i = 0; i < countAtackSpawnPoint; i++)
         {
-            Instantiate(Materia, atackSpawnPoints[i].transform.position,Quaternion.Euler(0,0,90));
+            var materia = Instantiate(Materia, positionForATack[i].transform.position,Quaternion.Euler(0,0,90));
+            objectsForAtack.Add(materia);
         }
     }
+
 }
