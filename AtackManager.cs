@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+//[RequireComponent(typeof(InverseMateria))]
 public class AtackManager : MonoBehaviour
 {
     [SerializeField] private Transform[] _atackSpawnPoints;
     [SerializeField] private Transform[] _airAtackSpawnPoints;
     [SerializeField] private Transform[] _inversiveAtackPoints;
-    [SerializeField] float _timeForAtack;
+    [SerializeField] private Transform SpikeFallSpawnPoint;
 
-    public GameObject InverseMateria;
+    public GameObject InversiveMateria;
     public GameObject Materia;
-    public GameObject AimMateria;
+    public GameObject AirMateria;
+    public GameObject SpikeFall;
     
     public static List<GameObject> objectsForAtack;
     public bool AtackInProcess;
+
     void Start()
     {
         EventBus.onAtackEnd -= AtackEndHandler;
@@ -46,11 +51,15 @@ public class AtackManager : MonoBehaviour
             }
             if (id == 1)
             {
-                InstantMateria(_airAtackSpawnPoints, AimMateria);
+                InstantMateria(_airAtackSpawnPoints, AirMateria);
             }
             if (id == 2)
             {
-                InstantMateria(_inversiveAtackPoints, InverseMateria);
+                InstantMateria(_inversiveAtackPoints, InversiveMateria);
+            }
+            if (id == 3)
+            {
+                InstantSpikeFall(SpikeFallSpawnPoint);
             }
         }
         
@@ -64,6 +73,11 @@ public class AtackManager : MonoBehaviour
             var materia = Instantiate(Materia, positionForATack[i].transform.position,Quaternion.Euler(0,0,90));
             objectsForAtack.Add(materia);
         }
+    }
+    void InstantSpikeFall(Transform positionForSpawn)
+    {
+        var trap = Instantiate(SpikeFall, positionForSpawn.transform.position, Quaternion.identity);
+        objectsForAtack.Add(trap);
     }
 
 }

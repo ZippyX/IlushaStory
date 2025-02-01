@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TrapSummon : MonoBehaviour
 {
-    [SerializeField] GameObject trap;
-    [SerializeField] Transform pointForTrap;
+    [SerializeField] private GameObject _trap;
+    [SerializeField] private Transform _pointForTrap;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Instantiate(trap, pointForTrap.position, Quaternion.identity);
+        Instantiate(_trap, _pointForTrap.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

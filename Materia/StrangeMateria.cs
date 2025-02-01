@@ -6,11 +6,11 @@ public class StrangeMateria : Materia
 {
     void Update()
     {
-        Atack();
+        Atack(StraightLeft);
         MateriaCleaner(transform.position.x <-7);//-13 левая граница  
     }
 
-    public override void Atack()
+    public void StraightLeft()
     {
        transform.position = Vector3.MoveTowards(this.transform.position, this.transform.position + Vector3.left, Speed * Time.deltaTime);
     }

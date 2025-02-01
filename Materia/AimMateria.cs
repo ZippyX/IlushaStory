@@ -6,7 +6,7 @@ public class AimMateria : Materia
 {
     private GameObject _player;
     private Vector3 _target;
-    private const float OFFSET = -0.5f;
+    private float _offset = -0.5f;
 
     void Start()
     {
@@ -16,15 +16,16 @@ public class AimMateria : Materia
     // Update is called once per frame
     void Update()
     {
-        Atack();
-        MateriaCleaner(transform.position.y<0 && AtackManager.objectsForAtack.Count>0);
+        Atack(Aim,_offset);
+        //MateriaCleaner(transform.position.y<-4 && AtackManager.objectsForAtack.Count>0); legacy xD
+        MateriaCleaner((transform.position.y < 0) && AtackManager.objectsForAtack.Count > 0);
     }
-    public override void Atack()
+    public void Aim(float offset)
     {
-        _target.y = OFFSET;
+        _target.y = _offset;
         transform.position = Vector3.MoveTowards(this.transform.position,_target, Speed * Time.deltaTime);
     }
-    void FindPlayer()
+    public void FindPlayer()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
         _target = _player.transform.position;
@@ -32,3 +33,5 @@ public class AimMateria : Materia
     }
     
 }
+
+/* (A && B) || (D&&B) => (A||D) && B*/

@@ -6,11 +6,11 @@ public class InverseMateria : Materia
 {
     private void Update()
     {
-        Atack();
+        Atack(StraightRight);
         MateriaCleaner(transform.position.x > 15);
     }
 
-    public override void Atack()
+    public void StraightRight()
     {
         transform.position = Vector3.MoveTowards(this.transform.position, this.transform.position + Vector3.right, Speed * Time.deltaTime);
     }

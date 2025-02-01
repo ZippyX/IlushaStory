@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public abstract class Materia : MonoBehaviour
+public class Trap : MonoBehaviour
 {
-    public float Speed;
-
-    public void Atack(Action atack)
+    // Start is called before the first frame update
+    void Start()
     {
-        atack();
+        
     }
-    public void Atack(Action<float> atack,float offset)
+
+    // Update is called once per frame
+    void Update()
     {
-        atack(offset);
+        MateriaCleaner(transform.position.y < -2);
     }
     public void MateriaCleaner(bool conditionForDestroy)
     {
