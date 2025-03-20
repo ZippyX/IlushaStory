@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 
 
@@ -16,6 +17,11 @@ public class AtackManager : MonoBehaviour
     public GameObject Materia;
     public GameObject AirMateria;
     public GameObject SpikeFall;
+    public GameObject Cell;
+    public Hero Player;
+    private GameObject _spawnedCell;
+
+    public TextMeshProUGUI tip;
     
     public static List<GameObject> objectsForAtack;
     public bool AtackInProcess;
@@ -28,7 +34,10 @@ public class AtackManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (!Player.PlayerInCell && _spawnedCell)
+        {
+            DestroyCell();
+        }
     }
 
     void AtackEndHandler()
@@ -45,8 +54,7 @@ public class AtackManager : MonoBehaviour
             AtackInProcess = true;
             EventBus.onAtackEnd += AtackEndHandler;
             if (id == 0)
-            {
-                
+            {           
                 InstantMateria(_atackSpawnPoints, Materia);
             }
             if (id == 1)
@@ -60,6 +68,11 @@ public class AtackManager : MonoBehaviour
             if (id == 3)
             {
                 InstantSpikeFall(SpikeFallSpawnPoint);
+            }
+            if (id == 4)
+            {
+                EventBus.onKrakenCatchStart += Player.EscapeStart;
+                InstantKrakenCatch();
             }
         }
         
@@ -78,6 +91,21 @@ public class AtackManager : MonoBehaviour
     {
         var trap = Instantiate(SpikeFall, positionForSpawn.transform.position, Quaternion.identity);
         objectsForAtack.Add(trap);
+    }
+    void InstantKrakenCatch()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player"); ;
+        _spawnedCell = Instantiate(Cell, player.transform.position, Quaternion.identity);
+        objectsForAtack.Add(_spawnedCell);
+        tip.gameObject.SetActive(true);
+        EventBus.onKrakenCatchStart?.Invoke();
+        Player.ResetSpaceCounter();
+    }
+    void DestroyCell()
+    {
+        Destroy(_spawnedCell);
+        objectsForAtack.Remove(_spawnedCell);
+        tip.gameObject.SetActive(false);
     }
 
 }

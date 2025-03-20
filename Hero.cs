@@ -20,6 +20,8 @@ public class Hero : MonoBehaviour
     private SpriteRenderer _sprite;
     public bool IsDeath;
     public bool isBoomDeath;
+    public bool PlayerInCell = false;
+    private int pressCounter = 0;
 
     private void Awake()
     {
@@ -59,6 +61,7 @@ public class Hero : MonoBehaviour
 
     private void Update()
     {
+        SpaceCounter();
         GroundCheck();
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
         {
@@ -74,6 +77,8 @@ public class Hero : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Escape();
+        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -128,5 +133,33 @@ public class Hero : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    public void Escape()
+    {      
+        if (PlayerInCell && pressCounter == 2)
+        {
+            Debug.Log("player escape: TRUE");
+            pressCounter = 0;
+            EventBus.onKrakenCatchStart -= SpaceCounter;
+            PlayerInCell = false;
+        }
+    }
+    public void SpaceCounter()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            pressCounter++;
+    }
+    public void EscapeStart()
+    {
+        PlayerInCell = true;
+    }
+    public void DestroyCell(GameObject cell)
+    {
+        Destroy(cell);
+    }
+    public void ResetSpaceCounter()
+    {
+        pressCounter = 0;
+    }
+
     
 }
