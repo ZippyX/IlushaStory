@@ -34,10 +34,6 @@ public class AtackManager : MonoBehaviour
 
     void Update()
     {
-        if (!Player.PlayerInCell && _spawnedCell)
-        {
-            DestroyCell();
-        }
     }
 
     void AtackEndHandler()
@@ -72,6 +68,7 @@ public class AtackManager : MonoBehaviour
             if (id == 4)
             {
                 EventBus.onKrakenCatchStart += Player.EscapeStart;
+                EventBus.onKrakenCatchEnd += DestroyCell;
                 InstantKrakenCatch();
             }
         }
@@ -94,8 +91,9 @@ public class AtackManager : MonoBehaviour
     }
     void InstantKrakenCatch()
     {
+        Vector3 placeForSpawn = new Vector3(Player.transform.position.x + 1, Player.transform.position.y);
         GameObject player = GameObject.FindGameObjectWithTag("Player"); ;
-        _spawnedCell = Instantiate(Cell, player.transform.position, Quaternion.identity);
+        _spawnedCell = Instantiate(Cell, placeForSpawn, Quaternion.identity);
         objectsForAtack.Add(_spawnedCell);
         tip.gameObject.SetActive(true);
         EventBus.onKrakenCatchStart?.Invoke();
@@ -106,6 +104,8 @@ public class AtackManager : MonoBehaviour
         Destroy(_spawnedCell);
         objectsForAtack.Remove(_spawnedCell);
         tip.gameObject.SetActive(false);
+        EventBus.onKrakenCatchEnd -= DestroyCell;
+        EventBus.onAtackEnd?.Invoke();
     }
 
 }

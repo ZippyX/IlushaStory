@@ -140,6 +140,7 @@ public class Hero : MonoBehaviour
             Debug.Log("player escape: TRUE");
             pressCounter = 0;
             EventBus.onKrakenCatchStart -= SpaceCounter;
+            EventBus.onKrakenCatchEnd?.Invoke();
             PlayerInCell = false;
         }
     }

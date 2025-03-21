@@ -11,7 +11,7 @@ public class BossAtackManager : MonoBehaviour
     void Start()
     {
         _atackManager = GetComponent<AtackManager>();
-        Attacks = new int[] {1,1,1,4};
+        Attacks = new int[] {4,1,4,1};
      
     }
 
